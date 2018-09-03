@@ -1,0 +1,3 @@
+---
+- import_playbook: Docker_install.yml
+- import_playbook: Docker_container_up.yml
