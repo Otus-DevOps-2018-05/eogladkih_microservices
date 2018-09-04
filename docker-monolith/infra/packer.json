@@ -9,7 +9,7 @@
         {
             "type": "googlecompute",
             "project_id": "{{user `project_id`}}",
-            "image_name": "Docker-{{timestamp}}",
+            "image_name": "docker-{{timestamp}}",
             "image_family": "docker-img",
             "source_image_family": "{{user `source_image_family`}}",
             "zone": "europe-west1-b",
