@@ -2,7 +2,7 @@ version: '3.3'
 services:
   post_db:
     volumes:
-      - prod_post_db:/prod_data/db
+      - prod_post_db:/data/db
     networks:
       - prod_back_net
   ui:
