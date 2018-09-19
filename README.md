@@ -56,3 +56,17 @@ docker-compose -p somename up -d
 docker-compose -p somename ps 
 docker-compose -p name down
 ```
+
+
+
+## 18-Topic. HW GitLab-CI-1
+
+
+1. Создана VM с устнаовленным GitLab-CI и runner.
+2. При помощи terraform реализована подготовка небходимого нам количества VM для runner приложений. 
+- задаем число нод с runner при помощи переменной num_of_nodes (1 - по умолчанию)
+- ис директории ./gitlab-ci/infra/ запускаем terraform apply
+3. При помощи ansible осуществляется установка всех зависимостей и регистрация runner приложений для всех VM с соответсвующим  тэгом.
+- в ./gitlab-ci/infra/var.yml указываем наш ключ для регистрации runner
+- запускаем ansible-playbook main.yml из директории ./gitlab-ci/infra/
+4. Настроена отправка сообщений из Gitlab в slack канал #evgeny_gladkih
