@@ -28,6 +28,7 @@ vm_prep:
     - cd ./gitlab-ci/infra
     - echo $SERVICEACCOUNT | base64 -d > ./serviceaccount.json
     - echo $TERRAFORM_VARS | base64 -d > ./terraform.tfvars
+    - ssh-keygen -t rsa -f ~/.ssh/appuser -C appuser -P ""
     - ls -al
     - terraform init
     - terraform apply -auto-approve
