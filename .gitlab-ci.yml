@@ -16,9 +16,16 @@ before_script:
 
 vm_prep:
   stage: vm_prep
-  image: hashicorp/terraform:light
+  image: 
+    name: hashicorp/terraform:light
+    entrypoint:
+      - '/usr/bin/env'
+      - 'PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin'
+
   before_script:
     - echo 'Replace global before_script'
+    - rm -rf .terraform
+    - terraform --version
   script:
     - echo 'Terraform should work here'
 
