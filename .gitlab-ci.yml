@@ -31,6 +31,7 @@ vm_prep:
     - echo $TERRAFORM_VARS | base64 -d > ./terraform.tfvars
     - ssh-keygen -t rsa -f ~/.ssh/appuser -C appuser -P ""
     - ls -al
+    - ./gce.py
     - terraform init
     - terraform apply -auto-approve
 
