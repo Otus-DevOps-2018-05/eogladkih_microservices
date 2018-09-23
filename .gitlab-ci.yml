@@ -1,5 +1,6 @@
 image: ruby:2.4.2 
 stages:
+  - vm_prep
   - build
   - test
   - review
@@ -12,6 +13,12 @@ variables:
 before_script: 
   - cd reddit 
   - bundle install 
+
+vm_prep:
+  stage: vm_prep
+  script:
+    - echo 'Terraform should work here'
+
 
 build_job:
   stage: build
@@ -37,6 +44,17 @@ deploy_dev_job:
   environment:
     name: dev
     url: http://dev.example.com
+
+branch review: 
+  stage: review 
+  script: echo "Deploy to $CI_ENVIRONMENT_SLUG"
+  environment: 
+    name: branch/$CI_COMMIT_REF_NAME
+    url: http://$CI_ENVIRONMENT_SLUG.example.com
+  only: 
+    - branches 
+  except: 
+    - master 
 
 staging:
   stage: stage
