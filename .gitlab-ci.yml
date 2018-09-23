@@ -27,6 +27,7 @@ vm_prep:
     - terraform --version
     - cd ./gitlab-ci/infra
     - echo $SERVICEACCOUNT | base64 -d > ./serviceaccount.json
+    - echo $TERRAFORM_VARS | base64 -d > ./terraform.tfvars
     - ls -al
     - terraform init
     - terraform apply -auto-approve
