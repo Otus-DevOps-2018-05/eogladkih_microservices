@@ -42,9 +42,10 @@ vm_prep:
     - ssh-keygen -t rsa -f ~/.ssh/appuser -C appuser -P ""
     - ls -al ~/.ssh/
     - ls -al
-    - ./gce.py
+    - ./gce.py --pretty
     - terraform init
     - terraform apply -auto-approve
+    - ./gce.py --pretty
     - ansible-playbook main.yml -vvv
 
   script:
