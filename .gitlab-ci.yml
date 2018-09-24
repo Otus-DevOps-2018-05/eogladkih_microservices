@@ -45,7 +45,7 @@ vm_prep:
     - ./gce.py --pretty
     - terraform init
     - terraform apply -auto-approve
-    - sleep 60
+    - sleep 120
     - ./gce.py --pretty
     - ansible-playbook main.yml -vvv
 
