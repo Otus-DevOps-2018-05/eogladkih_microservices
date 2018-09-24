@@ -39,11 +39,12 @@ vm_prep:
     - export GOOGLE_APPLICATION_CREDENTIALS="./serviceaccount.json"
     - echo $TERRAFORM_VARS | base64 -d > ./terraform.tfvars
     - ssh-keygen -t rsa -f ~/.ssh/appuser -C appuser -P ""
+    - ls -al ~/.ssh/
     - ls -al
     - ./gce.py
     - terraform init
     - terraform apply -auto-approve
-    - ansible-playbook main.yml
+    - ansible-playbook main.yml -vvv
 
   script:
     - echo 'Terraform should work here'
