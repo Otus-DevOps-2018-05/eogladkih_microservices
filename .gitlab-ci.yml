@@ -17,14 +17,19 @@ before_script:
 vm_prep:
   stage: vm_prep
   image: 
-    name: hashicorp/terraform:light
+    name: alpine:latest
     entrypoint:
       - '/usr/bin/env'
       - 'PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin'
   before_script:
     - echo 'Replace global before_script'
+    - apt add ansible
+    - apt add terraform
+    - apt add py-pip
+    - pip install apache-libcloud
     - rm -rf .terraform
     - terraform --version
+    - ansible --version
     - cd ./gitlab-ci/infra
     - echo $SERVICEACCOUNT | base64 -d > ./serviceaccount.json
     - export GOOGLE_APPLICATION_CREDENTIALS="./serviceaccount.json"
