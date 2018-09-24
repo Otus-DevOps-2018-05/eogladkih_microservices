@@ -26,6 +26,6 @@ variable "priv_key" {
 
 variable "instance_name" {
   description = "instance name"
-  default = "RUNNER"
+  default = "runner"
 }
 
