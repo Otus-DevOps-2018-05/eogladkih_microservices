@@ -5,7 +5,7 @@ if [ -z "$STATE" ]; then
    terraform init
    terraform apply -var instance_name=$CI_COMMIT_REF_NAME -auto-approve
    sleep 300
-   ansible-playbook main.yml   echo "empty"
+   ansible-playbook main.yml
 else 
    echo "not empty"
 fi  
