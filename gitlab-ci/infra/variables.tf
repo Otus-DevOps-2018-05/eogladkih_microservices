@@ -24,7 +24,8 @@ variable "priv_key" {
   description = "private key for connection"
 }
 
-variable "num_of_nodes" {
-  description = "number of nodes to create"
-  default = 1
+variable "instance_name" {
+  description = "instance name"
+  default = "RUNNER"
 }
+
