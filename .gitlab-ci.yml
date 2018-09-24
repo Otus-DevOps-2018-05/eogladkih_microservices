@@ -31,8 +31,6 @@ vm_prep:
     - apk add py2-crypto
     - apk add ca-certificates
     - rm -rf .terraform
-    - terraform --version
-    - ansible --version
     - cd ./gitlab-ci/infra
     - echo $SERVICEACCOUNT | base64 -d > ./serviceaccount.json
     - echo $SECRETS_PY | base64 -d > ./secrets.py
@@ -40,14 +38,11 @@ vm_prep:
     - export GOOGLE_APPLICATION_CREDENTIALS="./serviceaccount.json"
     - echo $TERRAFORM_VARS | base64 -d > ./terraform.tfvars
     - ssh-keygen -t rsa -f ~/.ssh/appuser -C appuser -P ""
-    - ls -al ~/.ssh/
-    - ls -al
-    - ./gce.py --pretty
     - terraform init
     - terraform apply -auto-approve
     - sleep 300
-    - ./gce.py --pretty
-    - ansible-playbook main.yml -vvv
+    - ansible-playbook main.yml
+    - echo $CI_COMMIT_REF_NAME
 
   script:
     - echo 'Terraform should work here'
