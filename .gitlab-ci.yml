@@ -28,6 +28,7 @@ vm_prep:
     - apk add terraform
     - apk add py-pip
     - pip install apache-libcloud
+    - pip install pycrypto
     - rm -rf .terraform
     - terraform --version
     - ansible --version
