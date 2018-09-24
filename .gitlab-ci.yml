@@ -23,9 +23,9 @@ vm_prep:
       - 'PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin'
   before_script:
     - echo 'Replace global before_script'
-    - apt add ansible
-    - apt add terraform
-    - apt add py-pip
+    - apk add ansible
+    - apk add terraform
+    - apk add py-pip
     - pip install apache-libcloud
     - rm -rf .terraform
     - terraform --version
