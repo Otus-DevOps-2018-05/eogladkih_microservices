@@ -36,6 +36,7 @@ vm_prep:
     - cd ./gitlab-ci/infra
     - echo $SERVICEACCOUNT | base64 -d > ./serviceaccount.json
     - echo $SECRETS_PY | base64 -d > ./secrets.py
+    - echo $VAR_YML | base64 -d > ./var.yml
     - export GOOGLE_APPLICATION_CREDENTIALS="./serviceaccount.json"
     - echo $TERRAFORM_VARS | base64 -d > ./terraform.tfvars
     - ssh-keygen -t rsa -f ~/.ssh/appuser -C appuser -P ""
