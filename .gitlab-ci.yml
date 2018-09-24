@@ -38,10 +38,7 @@ vm_prep:
     - export GOOGLE_APPLICATION_CREDENTIALS="./serviceaccount.json"
     - echo $TERRAFORM_VARS | base64 -d > ./terraform.tfvars
     - ssh-keygen -t rsa -f ~/.ssh/appuser -C appuser -P ""
-    - terraform init
-    - terraform apply -var instance_name=$CI_COMMIT_REF_NAME -auto-approve exit 0
-    - sleep 300
-    - ansible-playbook main.yml
+    - ./check_statement.sh
   
   script:
     - echo 'Terraform should work here'
