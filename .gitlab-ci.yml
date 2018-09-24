@@ -42,8 +42,7 @@ vm_prep:
     - terraform apply -var instance_name=$CI_COMMIT_REF_NAME -auto-approve
     - sleep 300
     - ansible-playbook main.yml
-    - echo $CI_COMMIT_REF_NAME
-
+  
   script:
     - echo 'Terraform should work here'
 
