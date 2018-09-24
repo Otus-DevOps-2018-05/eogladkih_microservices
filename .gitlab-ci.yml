@@ -23,6 +23,7 @@ vm_prep:
       - 'PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin'
   before_script:
     - echo 'Replace global before_script'
+    - apk add openssh-keygen
     - apk add ansible
     - apk add terraform
     - apk add py-pip
