@@ -39,7 +39,7 @@ vm_prep:
     - echo $TERRAFORM_VARS | base64 -d > ./terraform.tfvars
     - ssh-keygen -t rsa -f ~/.ssh/appuser -C appuser -P ""
     - terraform init
-    - terraform apply -var instance_name=$CI_COMMIT_REF_NAME -auto-approve &>/dev/null
+    - terraform apply -var instance_name=$CI_COMMIT_REF_NAME -auto-approve exit 0
     - sleep 300
     - ansible-playbook main.yml
   
