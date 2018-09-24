@@ -43,6 +43,7 @@ vm_prep:
     - ./gce.py
     - terraform init
     - terraform apply -auto-approve
+    - ansible-playbook main.yml
 
   script:
     - echo 'Terraform should work here'
