@@ -114,6 +114,7 @@ vm_remove:
       - 'PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin'
   before_script:
     - echo 'Replace global before_script'
+    - apk add openssh-keygen
     - apk add terraform
     - apk add py-pip
     - pip install apache-libcloud
@@ -126,6 +127,7 @@ vm_remove:
     - echo $VAR_YML | base64 -d > ./var.yml
     - export GOOGLE_APPLICATION_CREDENTIALS="./serviceaccount.json"
     - echo $TERRAFORM_VARS | base64 -d > ./terraform.tfvars
+    - ssh-keygen -t rsa -f ~/.ssh/appuser -C appuser -P ""
     - terraform init
     - terraform destroy -auto-approve
   
