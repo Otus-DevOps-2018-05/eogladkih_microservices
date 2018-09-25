@@ -50,6 +50,8 @@ build_job:
   stage: build
   script:
     - echo 'Building'
+  tags:
+    - $CI_COMMIT_REF_NAME
 
 test_unit_job: 
   stage: test 
@@ -57,11 +59,15 @@ test_unit_job:
     - mongo:latest 
   script: 
     - ruby simpletest.rb 
+  tags:
+    - $CI_COMMIT_REF_NAME
 
 test_integration_job:
   stage: test
   script:
     - echo 'Testing 2'
+  tags:
+    - $CI_COMMIT_REF_NAME
 
 deploy_dev_job:
   stage: review
@@ -70,6 +76,8 @@ deploy_dev_job:
   environment:
     name: dev
     url: http://dev.example.com
+  tags:
+    - $CI_COMMIT_REF_NAME
 
 branch review: 
   stage: review 
@@ -81,6 +89,8 @@ branch review:
     - branches 
   except: 
     - master 
+  tags:
+    - $CI_COMMIT_REF_NAME
 
 staging:
   stage: stage
@@ -92,6 +102,8 @@ staging:
   environment:
     name: stage
     url: https://beta.example.com
+  tags:
+    - $CI_COMMIT_REF_NAME
 
 production:
   stage: production
@@ -103,6 +115,8 @@ production:
   environment:
     name: production
     url: https://example.com
+  tags:
+    - $CI_COMMIT_REF_NAME
 
 vm_remove:
   stage: vm_remove
