@@ -6,6 +6,7 @@ stages:
   - review
   - stage
   - production
+  - vm_remove
 
 variables: 
   DATABASE_URL: 'mongodb://mongo/user_posts'
@@ -103,3 +104,30 @@ production:
     name: production
     url: https://example.com
 
+vm_remove:
+  stage: vm_remove
+  when: manual
+  image: 
+    name: alpine:latest
+    entrypoint:
+      - '/usr/bin/env'
+      - 'PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin'
+  before_script:
+    - echo 'Replace global before_script'
+    - apk add terraform
+    - apk add py-pip
+    - pip install apache-libcloud
+    - apk add py2-crypto
+    - apk add ca-certificates
+    - rm -rf .terraform
+    - cd ./gitlab-ci/infra
+    - echo $SERVICEACCOUNT | base64 -d > ./serviceaccount.json
+    - echo $SECRETS_PY | base64 -d > ./secrets.py
+    - echo $VAR_YML | base64 -d > ./var.yml
+    - export GOOGLE_APPLICATION_CREDENTIALS="./serviceaccount.json"
+    - echo $TERRAFORM_VARS | base64 -d > ./terraform.tfvars
+    - terraform init
+    - terraform destroy -auto-approve
+  
+  script:
+    - echo 'Terraform should work here'

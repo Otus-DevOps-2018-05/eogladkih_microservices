@@ -7,5 +7,5 @@ if [ -z "$STATE" ]; then
    sleep 300
    ansible-playbook main.yml
 else 
-   echo "not empty"
+   echo "VM already exist"
 fi  
