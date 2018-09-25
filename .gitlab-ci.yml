@@ -1,11 +1,11 @@
 image: ruby:2.4.2 
 stages:
   - vm_prep
-  - build
-  - test
-  - review
-  - stage
-  - production
+#  - build
+#  - test
+#  - review
+#  - stage
+#  - production
   - vm_remove
 
 variables: 
@@ -129,6 +129,7 @@ vm_remove:
     - echo $TERRAFORM_VARS | base64 -d > ./terraform.tfvars
     - ssh-keygen -t rsa -f ~/.ssh/appuser -C appuser -P ""
     - terraform init
+    - terraform refresh 
     - terraform destroy -auto-approve
   
   script:
