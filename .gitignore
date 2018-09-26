@@ -1,0 +1,8 @@
+*.tfstate
+*.tfstate.*.backup
+*.tfstate.backup
+*.tfvars
+.terraform/
+packer_vars.json
+secrets.py
+secrets.pyc

@@ -1,0 +1,32 @@
+{
+	"variables": {
+		"project_id": "null",
+		"source_image_family": "null",
+		"machine_type": "f1-micro"
+	},
+	
+    "builders": [
+        {
+            "type": "googlecompute",
+            "project_id": "{{user `project_id`}}",
+            "image_name": "docker-{{timestamp}}",
+            "image_family": "docker-img",
+            "source_image_family": "{{user `source_image_family`}}",
+            "zone": "europe-west1-b",
+            "ssh_username": "appuser",
+            "machine_type": "{{user `machine_type`}}",
+			"image_description": "image for docker",
+			"disk_size": "10",
+			"disk_type": "pd-standard",
+			"network": "default",
+			"tags": "docker"
+        }
+    ],
+    "provisioners": [
+        {
+            "type": "ansible",
+            "playbook_file": "Docker_install.yml",
+            "user": "appuser"
+        }
+    ]
+}
