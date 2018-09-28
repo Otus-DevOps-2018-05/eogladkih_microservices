@@ -51,7 +51,7 @@ build_job:
   script:
     - echo 'Building'
   tags:
-    - $CI_COMMIT_REF_NAME
+    - gl_runner
 
 test_unit_job: 
   stage: test 
@@ -60,14 +60,14 @@ test_unit_job:
   script: 
     - ruby simpletest.rb 
   tags:
-    - $CI_COMMIT_REF_NAME
+    - gl_runner
 
 test_integration_job:
   stage: test
   script:
     - echo 'Testing 2'
   tags:
-    - $CI_COMMIT_REF_NAME
+    - gl_runner
 
 deploy_dev_job:
   stage: review
@@ -77,7 +77,7 @@ deploy_dev_job:
     name: dev
     url: http://dev.example.com
   tags:
-    - $CI_COMMIT_REF_NAME
+    - gl_runner
 
 branch review: 
   stage: review 
@@ -90,7 +90,7 @@ branch review:
   except: 
     - master 
   tags:
-    - $CI_COMMIT_REF_NAME
+    - gl_runner
 
 staging:
   stage: stage
@@ -103,7 +103,7 @@ staging:
     name: stage
     url: https://beta.example.com
   tags:
-    - $CI_COMMIT_REF_NAME
+    - gl_runner
 
 production:
   stage: production
@@ -116,7 +116,7 @@ production:
     name: production
     url: https://example.com
   tags:
-    - $CI_COMMIT_REF_NAME
+    - gl_runner
 
 vm_remove:
   stage: vm_remove
@@ -149,3 +149,5 @@ vm_remove:
   
   script:
     - echo 'Terraform should work here'
+  tags:
+    - default_runner
