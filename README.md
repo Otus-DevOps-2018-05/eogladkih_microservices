@@ -91,3 +91,77 @@ docker-compose -p name down
 3. gitlab не поддерживает определение tags через переменную.
 4. gitlab не поддерживает определение tags черезе условие не такой тэг.
 5. gitlab различает tag и tags, что не совсем логично.
+
+
+
+## 20-Topic. HW Monitoring-1
+
+
+1. Запущен prometheus
+2. Настроен мониторинг состояния микросервисов (добавлены соответсвущие алиасы для mongo)
+3. Настроен сбор метрик хоста с использованием экспортера 
+4. Настроен мониторинг MongoDB при помощи xendera/mongodb-exporter
+docker-compose.yml
+```
+  mongodb-exporter:
+    image: xendera/mongodb-exporter
+    container_name: mongodb-exporter
+    hostname: mongodb-exporter
+    networks:
+      - back_net
+    ports:
+      - 9216:9216
+    environment:
+      - MONGODB_URL=mongodb://post_db
+```
+prometheus.yml
+```
+  - job_name: 'mongodb-exporter'
+    static_configs:
+      - targets:
+        - 'mongodb-exporter:9216'
+```
+5. Добавлен blackbpx exporter и настроен мониторинг сервисов comment, ui, post.
+docker-compose.yml
+```
+  black-box:
+    image: prom/blackbox-exporter
+    networks:
+      - back_net
+      - front_net
+```
+prometheus.yml
+```
+  - job_name: 'blackbox_http'
+    metrics_path: /probe
+    params:
+      module: [http_2xx]  
+    static_configs:
+      - targets:
+        - http://ui:9292 
+    relabel_configs:
+      - source_labels: [__address__]
+        target_label: __param_target
+      - source_labels: [__param_target]
+        target_label: instance
+      - target_label: __address__
+        replacement: black-box:9115  
+
+  - job_name: 'blackbox_tcp'
+    metrics_path: /probe
+    params:
+      module: [tcp_connect]  
+    static_configs:
+      - targets:
+        - post:5000
+        - comment:9292   
+    relabel_configs:
+      - source_labels: [__address__]
+        target_label: __param_target
+      - source_labels: [__param_target]
+        target_label: instance
+      - target_label: __address__
+        replacement: black-box:9115  
+```
+6. Полученные образы с нашими сервисами запушены в DockerHub.
+https://hub.docker.com/r/eogladkih/
