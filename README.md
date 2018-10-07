@@ -236,8 +236,8 @@ volumes:
  - gcloud compute firewall-rules create alertmanger-default --allow tcp:9093
  
 7. Все Images добавлены в DockerHub.
-docker push $USER_NAME/ui
-docker push $USER_NAME/comment
-docker push $USER_NAME/post
-docker push $USER_NAME/prometheus
-docker push $USER_NAME/alertmanager
+ - docker push $USER_NAME/ui
+ - docker push $USER_NAME/comment
+ - docker push $USER_NAME/post
+ - docker push $USER_NAME/prometheus
+ - docker push $USER_NAME/alertmanager
