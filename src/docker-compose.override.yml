@@ -8,15 +8,21 @@ services:
   ui:
     networks:
       - prod_front_net
+    volumes:
+      - ./ui:/app  
     command: puma --debug -w 2
   post:
     networks:
       - prod_back_net
       - prod_front_net
+    volumes:
+      - ./post-py:/app
   comment:
     networks:
       - prod_back_net
       - prod_front_net
+    volumes:
+      - ./comment:/app
     command: puma --debug -w 2
 
 volumes:
