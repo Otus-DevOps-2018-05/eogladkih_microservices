@@ -1,0 +1,39 @@
+version: '3.3'
+services:
+  post_db:
+    volumes:
+      - prod_post_db:/data/db
+    networks:
+      - prod_back_net
+  ui:
+    networks:
+      - prod_front_net
+    volumes:
+      - ./ui:/app  
+    command: puma --debug -w 2
+  post:
+    networks:
+      - prod_back_net
+      - prod_front_net
+    volumes:
+      - ./post-py:/app
+  comment:
+    networks:
+      - prod_back_net
+      - prod_front_net
+    volumes:
+      - ./comment:/app
+    command: puma --debug -w 2
+
+volumes:
+  prod_post_db:
+
+networks:
+  prod_back_net:
+    ipam:
+      config:
+      - subnet: 10.0.3.0/24
+  prod_front_net:
+    ipam:
+      config:
+      - subnet: 10.0.4.0/24

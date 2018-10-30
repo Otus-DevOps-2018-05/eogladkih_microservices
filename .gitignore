@@ -6,3 +6,4 @@
 packer_vars.json
 secrets.py
 secrets.pyc
+.env

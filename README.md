@@ -36,3 +36,23 @@ docker run -d --network=reddit --network-alias=post_2 -e POST_DATABASE_HOST=post
 docker run -d --network=reddit --network-alias=comment_2 -e COMMENT_DATABASE_HOST=comment_db_2 eogladkih/comment:1.0  
 docker run -d --network=reddit -p 9292:9292 -e POST_SERVICE_HOST=post_2 -e COMMENT_SERVICE_HOST=comment_2 eogladkih/ui:1.0 
 ```
+
+
+## 17-Topic. HW Docker-4
+
+
+1. docker-compose.yml изменен под кейс со множеством сетей.
+2. Выполнене параметризация параметров при помощи файла .env.
+3. Для файла .env сделано исключение в gitignore и создан пример .env.example.
+4. Создан файл docker-compose.override.yml при помощи которого можно переопределить некоторые параметры не требующие пересборки образов.
+5. Реализован запуск запуска puma в режиме отладки с двумя воркерами.
+
+
+Префикс берется из имени проекта. По умолчанию проект именутеся так же как и папка из которой он запускается.
+Имя проекта можно изменить во время запуска проекта при помощи ключа -p. 
+docker-compose -p somename up -d
+В дальнейшем необходимо так же указывать имя проекта иначе ничего не отобразится и не удалится.
+```
+docker-compose -p somename ps 
+docker-compose -p name down
+```
