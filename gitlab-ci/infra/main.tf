@@ -5,8 +5,7 @@ provider "google" {
 }
 
 resource "google_compute_instance" "gitlab" {
-  count        = "${var.num_of_nodes}"
-  name         = "gitlab-runner-${count.index}"
+  name         = "${var.instance_name}"
   machine_type = "n1-standard-1"
   zone         = "${var.zone}"
   

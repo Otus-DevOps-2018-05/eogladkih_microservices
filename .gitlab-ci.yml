@@ -1,8 +1,12 @@
 image: ruby:2.4.2 
 stages:
+  - vm_prep
   - build
   - test
-  - deploy
+  - review
+  - stage
+  - production
+  - vm_remove
 
 variables: 
   DATABASE_URL: 'mongodb://mongo/user_posts'
@@ -11,10 +15,43 @@ before_script:
   - cd reddit 
   - bundle install 
 
+vm_prep:
+  stage: vm_prep
+  image: 
+    name: alpine:latest
+    entrypoint:
+      - '/usr/bin/env'
+      - 'PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin'
+  before_script:
+    - echo 'Replace global before_script'
+    - apk add openssh-keygen
+    - apk add ansible
+    - apk add terraform
+    - apk add py-pip
+    - pip install apache-libcloud
+    - apk add py2-crypto
+    - apk add ca-certificates
+    - rm -rf .terraform
+    - cd ./gitlab-ci/infra
+    - echo $SERVICEACCOUNT | base64 -d > ./serviceaccount.json
+    - echo $SECRETS_PY | base64 -d > ./secrets.py
+    - echo $VAR_YML | base64 -d > ./var.yml
+    - export GOOGLE_APPLICATION_CREDENTIALS="./serviceaccount.json"
+    - echo $TERRAFORM_VARS | base64 -d > ./terraform.tfvars
+    - ssh-keygen -t rsa -f ~/.ssh/appuser -C appuser -P ""
+    - ./check_statement.sh
+  
+  script:
+    - echo 'Terraform should work here'
+
+
+
 build_job:
   stage: build
   script:
     - echo 'Building'
+  tags:
+    - gl_runner
 
 test_unit_job: 
   stage: test 
@@ -22,13 +59,95 @@ test_unit_job:
     - mongo:latest 
   script: 
     - ruby simpletest.rb 
+  tags:
+    - gl_runner
 
 test_integration_job:
   stage: test
   script:
     - echo 'Testing 2'
+  tags:
+    - gl_runner
 
-deploy_job:
-  stage: deploy
+deploy_dev_job:
+  stage: review
   script:
     - echo 'Deploy'
+  environment:
+    name: dev
+    url: http://dev.example.com
+  tags:
+    - gl_runner
+
+branch review: 
+  stage: review 
+  script: echo "Deploy to $CI_ENVIRONMENT_SLUG"
+  environment: 
+    name: branch/$CI_COMMIT_REF_NAME
+    url: http://$CI_ENVIRONMENT_SLUG.example.com
+  only: 
+    - branches 
+  except: 
+    - master 
+  tags:
+    - gl_runner
+
+staging:
+  stage: stage
+  when: manual
+  only:
+    - /^\d+\.\d+\.\d+/
+  script: 
+    - echo 'Deploy'
+  environment:
+    name: stage
+    url: https://beta.example.com
+  tags:
+    - gl_runner
+
+production:
+  stage: production
+  when: manual
+  only:
+    - /^\d+\.\d+\.\d+/
+  script: 
+    - echo 'Deploy'
+  environment:
+    name: production
+    url: https://example.com
+  tags:
+    - gl_runner
+
+vm_remove:
+  stage: vm_remove
+  when: manual
+  image: 
+    name: alpine:latest
+    entrypoint:
+      - '/usr/bin/env'
+      - 'PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin'
+  before_script:
+    - echo 'Replace global before_script'
+    - apk add openssh-keygen
+    - apk add terraform
+    - apk add py-pip
+    - pip install apache-libcloud
+    - apk add py2-crypto
+    - apk add ca-certificates
+    - rm -rf .terraform
+    - cd ./gitlab-ci/infra
+    - echo $SERVICEACCOUNT | base64 -d > ./serviceaccount.json
+    - echo $SECRETS_PY | base64 -d > ./secrets.py
+    - echo $VAR_YML | base64 -d > ./var.yml
+    - export GOOGLE_APPLICATION_CREDENTIALS="./serviceaccount.json"
+    - echo $TERRAFORM_VARS | base64 -d > ./terraform.tfvars
+    - ssh-keygen -t rsa -f ~/.ssh/appuser -C appuser -P ""
+    - terraform init
+    - terraform show
+    - terraform plan
+    - terraform destroy -auto-approve
+  
+  script:
+    - echo 'Terraform should work here'
+  tags:
+    - default_runner

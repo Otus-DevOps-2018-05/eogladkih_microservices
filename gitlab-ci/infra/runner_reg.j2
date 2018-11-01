@@ -6,7 +6,7 @@ docker exec -it gitlab-runner gitlab-runner register \
 --url "http://35.241.163.138/" \
 --registration-token "{{gitlab_reg_token}}" \
 --run-untagged \
---tag-list "linux,xenial,ubuntu,docker" \
+--tag-list "linux,xenial,ubuntu,docker,gl_runner,{{ansible_hostname}}" \
 --description "{{ansible_hostname}}" \
 --locked="false" 
 
