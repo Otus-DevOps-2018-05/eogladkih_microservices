@@ -1,0 +1,37 @@
+---
+- name: Start runner_gitlab-ci
+  hosts: tag_gitlab-runner
+  vars_files:
+    - ./var.yml
+  become: true
+
+  tasks:
+    
+    - name: Create folders
+      file: 
+        path: "/srv/gitlab/config"
+        state: directory 
+
+    - name: Copy config
+      copy:
+        src: ./runner_gitlab_docker_compose.yml
+        dest: /srv/gitlab/config/docker-compose.yml
+   
+    - name: Start runer_gitlab container
+      docker_container:
+        name: gitlab-runner
+        image: gitlab/gitlab-runner:latest
+        restart_policy: always
+        volumes:
+          - '/srv/gitlab-runner/config:/etc/gitlab-runner'
+          - '/var/run/docker.sock:/var/run/docker.sock'
+        state: started
+    
+    - name: Copy runner  registration script
+      template:
+        src: ./runner_reg.j2
+        dest: runner_reg.sh
+        mode: o+x,g+x,a+x
+
+    - name: Run registration script
+      raw: /home/appuser/runner_reg.sh

@@ -1,0 +1,16 @@
+- name: Prepare template for runner
+  hosts: tag_gitlab-ci
+  become: true
+
+  tasks:
+  
+    - name: Replase url for gitlab-ci server
+      lineinfile: 
+        path: ./runner_reg.j2
+        regexp: '^--url "http://'
+        line: '--url "http://{{gce_public_ip}}/" \'
+      delegate_to: localhost
+
+
+
+
