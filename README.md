@@ -165,3 +165,79 @@ prometheus.yml
 ```
 6. Полученные образы с нашими сервисами запушены в DockerHub.
 https://hub.docker.com/r/eogladkih/
+
+
+
+## 21-Topic. HW Monitoring-2
+
+
+1. Выполнено разделение файла docker-compose на 2 (отельно все приложения, и отдельно все что связано с мониторингом)
+docker-compose.yml и docker-compose-monitoring.yml
+
+2. Настроен мониторинг Docker конйтейнеров 
+Для наблюдения за состоянием Docker контейнеров используется cadvisor.
+docker-compose-monitoring:
+```
+...
+cadvisor:
+  image: google/cadvisor:v0.29.0
+  volumes:
+    - '/:/rootfs:ro'
+    - '/var/run:/var/run:rw'
+    - '/sys:/sys:ro'
+    - '/var/lib/docker/:/var/lib/docker:ro'
+  ports:
+    - '8080:8080'
+```
+prometheus.yml
+```
+...
+  - job_name:'cadvisor'
+    static_configs:
+      - targets:
+        - 'cadvisor:8080'
+```
+
+3. Настроена визуализация метрик
+Для визуализации используется Grafana.
+docker-compose-monitoring.yml
+```
+services:
+
+  grafana:
+    image: grafana/grafana:5.0.0
+    volumes:
+      - grafana_data:/var/lib/grafana
+    environment:
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_SECURITY_ADMIN_PASSWORD=secret
+    depends_on:
+      - prometheus
+    ports:
+      - 3000:3000
+
+volumes:
+  grafana_data:
+```
+
+4. Организован сбор метрик приложения и бизнес метрик
+Созданы 3 графика в дашборде UI_Service_Monitoring:
+ - UI http requests
+ - Rate of UI HTTP Requests with Error
+ - HTTP response time 95th percentile
+ 
+5. Настроен и проверен алертинг
+В качестве системы алертинга используется alertmanager, а уведомления о проблемах отсылаются в slack канал.
+
+6. Созданы все необходимые разрешения в firewall gcloud.
+Созданы следующие разрешения:
+ - gcloud compute firewall-rules create cadvisor-default --allow tcp:8080
+ - gcloud compute firewall-rules create grafana-default --allow tcp:3000
+ - gcloud compute firewall-rules create alertmanger-default --allow tcp:9093
+ 
+7. Все Images добавлены в DockerHub.
+ - docker push $USER_NAME/ui
+ - docker push $USER_NAME/comment
+ - docker push $USER_NAME/post
+ - docker push $USER_NAME/prometheus
+ - docker push $USER_NAME/alertmanager
