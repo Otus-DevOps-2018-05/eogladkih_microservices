@@ -241,3 +241,33 @@ volumes:
  - docker push $USER_NAME/post
  - docker push $USER_NAME/prometheus
  - docker push $USER_NAME/alertmanager
+
+
+
+## 22-Topic. HW Logging-1
+
+
+1. Добавлен конфигурационный файл docker/docker-compose-logging.yml при помощи которого создаются контейнеры для elasticsearch, fluentd, kibana и zipkin.
+2. Обновлены файлы приложения /src.
+3. В файле logging/fluentd/fluent.conf определены параметры преобразования (парсинга) логов для приложений post и ui.
+4. Реализован разбор логов разной структуры для приложения ui.
+```
+<filter service.ui>
+  @type parser
+  format grok
+  grok_pattern service=%{WORD:service} \| event=%{WORD:event} \| request_id=%{GREEDYDATA:request_id} \| message='%{GREEDYDATA:message}'
+  key_name message
+  reserve_data true
+</filter>
+
+<filter service.ui>
+  @type parser
+  format grok
+  grok_pattern service=%{WORD:service} \| event=%{WORD:event} \| path=%{URIPATH:path} \| request_id=%{GREEDYDATA:request_id} \| remote_addr=%{IP:remote_addr} \| method=%{GREEDYDATA:method} \| response_status=%{NUMBER:response_status}
+  key_name message
+  reserve_data true
+</filter>
+```
+5. В рамках поиска ошибок в работе bugged приложения при помощи ziprin определено, что все праблемы связвны с подключением сервисов.
+Анализ файлов приложений выявил, что в соответвующих файлах Dockerfile отутсовали неолбходимые для нормальной работы параметры ENV.
+6. Образы для логирования (тэг logging) запушены в docker hub - https://hub.docker.com/r/eogladkih/
