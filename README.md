@@ -280,3 +280,12 @@ volumes:
 1. Выполнены все шаги из туториала Kubernetes The Hard way;
 2. Все файлы созданные во время выполнения скопированы в директорию kubernetes/the_hard_way;
 3. Созданный кластер Kubernetes удален.
+
+
+
+## 23-Topic. HW Kubernetes-2
+
+
+1. Развернуто локальное окружение для работы с Kubernetes;
+2. Развернут Kubernetes в GKE;
+3. Запущен reddit в Kubernetes.
