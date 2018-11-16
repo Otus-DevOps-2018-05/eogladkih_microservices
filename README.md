@@ -305,3 +305,14 @@ volumes:
  - Network Policies 
  - PersistentVolumes 
  - PersistentVolumeClaims
+
+
+
+
+## 25-Topic. HW Kubernetes-4
+
+
+- Знакомство с Helm и создание Chart
+- Знаскомство с управлением зависимостями
+- Устнаовка GitLab в kubernetes
+- Настройка CI и деплой приложения
