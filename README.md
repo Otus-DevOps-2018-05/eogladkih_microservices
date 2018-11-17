@@ -289,3 +289,19 @@ volumes:
 1. Развернуто локальное окружение для работы с Kubernetes;
 2. Развернут Kubernetes в GKE;
 3. Запущен reddit в Kubernetes.
+
+
+
+
+## 24-Topic. HW Kubernetes-3
+
+
+Обзор компанент kubernetes:
+ - Ingress Controller 
+ - Ingress  
+ - Secret 
+ - TLS 
+ - LoadBalancer Service 
+ - Network Policies 
+ - PersistentVolumes 
+ - PersistentVolumeClaims

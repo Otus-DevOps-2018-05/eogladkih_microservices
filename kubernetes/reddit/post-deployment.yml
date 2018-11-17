@@ -1,28 +1,35 @@
 ---
-apiVersion: apps/v1beta2
+apiVersion: apps/v1beta1
 kind: Deployment
 metadata:
-  name: post
+  name: mongo
   labels:
     app: reddit
-    component: post
+    component: mongo
+    post-db: "true"
+    comment-db: "true"
 spec:
-  replicas: 3
+  replicas: 1
   selector:
     matchLabels:
       app: reddit
-      component: post
+      component: mongo
   template:
     metadata:
-      name: post
+      name: mongo
       labels:
         app: reddit
-        component: post
+        component: mongo
+        post-db: "true"
+        comment-db: "true"
     spec:
       containers:
-      - image: eogladkih/post
-        name: post
-        env:
-        - name: POST_DATABASE_HOST
-          value: post-db
-
+      - image: mongo:3.2
+        name: mongo
+        volumeMounts:
+        - name: mongo-gce-pd-storage
+          mountPath: /data/db
+      volumes:
+      - name: mongo-gce-pd-storage
+        persistentVolumeClaim:
+          claimName: mongo-pvc
